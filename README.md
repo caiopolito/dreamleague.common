@@ -1,0 +1,1 @@
+A library containing common domain structures for a DreamLeague project.

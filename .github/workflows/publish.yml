@@ -1,0 +1,37 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    name: Pack and publish to GitHub Packages
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 6.x
+
+      - name: Restore
+        run: dotnet restore dreamleague.Common/dreamleague.Common.csproj
+
+      - name: Pack
+        run: dotnet pack dreamleague.Common/dreamleague.Common.csproj --configuration Release --no-restore --output ./nupkg
+
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget push ./nupkg/*.nupkg \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --source https://nuget.pkg.github.com/caiopolito/index.json \
+            --skip-duplicate

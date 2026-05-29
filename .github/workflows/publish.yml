@@ -23,8 +23,11 @@ jobs:
         with:
           dotnet-version: 6.x
 
+      - name: Build
+        run: dotnet build dreamleague.Common/dreamleague.common.csproj --configuration Release
+
       - name: Pack
-        run: dotnet pack dreamleague.Common/dreamleague.common.csproj --configuration Release --output ./nupkg
+        run: dotnet pack dreamleague.Common/dreamleague.common.csproj --configuration Release --no-build --output ./nupkg
 
       - name: Publish to GitHub Packages
         run: |
